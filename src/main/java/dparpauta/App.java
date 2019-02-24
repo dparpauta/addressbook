@@ -12,5 +12,6 @@ public class App
         AddressBookDataAnalyser addressBookDataAnalyser = new AddressBookDataAnalyser(personDao);
 
         System.out.println("The number of males in the address book is " + addressBookDataAnalyser.getNumberOfMales());
+        System.out.println("The oldest person is " + addressBookDataAnalyser.getOldestPerson().getName());
     }
 }

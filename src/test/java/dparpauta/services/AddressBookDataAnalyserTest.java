@@ -35,10 +35,7 @@ public class AddressBookDataAnalyserTest {
     public void testGetNumberOfMales() throws ParseException {
 
         // given
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
-        List<Person> people = new ArrayList<>();
-        people.add(Person.builder().name("Dan Parpauta").gender(Gender.MALE).dateOfBirth(dateFormat.parse("04/04/91")).build());
-        people.add(Person.builder().name("Jane Doe").gender(Gender.FEMALE).dateOfBirth(dateFormat.parse("18/09/87")).build());
+        List<Person> people = getPeople();
 
         when(personDao.getAll()).thenReturn(people);
 
@@ -47,5 +44,32 @@ public class AddressBookDataAnalyserTest {
 
         // then
         assertEquals(1, result);
+    }
+
+
+    @Test
+    public void testGetOldestPerson() throws ParseException {
+
+        // given
+        List<Person> people = getPeople();
+
+        when(personDao.getAll()).thenReturn(people);
+
+        // when
+        Person result = target.getOldestPerson();
+
+        // then
+        assertEquals("Jane Doe", result.getName());
+    }
+
+
+    private List<Person> getPeople() throws ParseException {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
+        List<Person> people = new ArrayList<>();
+        people.add(Person.builder().name("Dan Parpauta").gender(Gender.MALE).dateOfBirth(dateFormat.parse("04/04/91")).build());
+        people.add(Person.builder().name("Jane Doe").gender(Gender.FEMALE).dateOfBirth(dateFormat.parse("18/09/87")).build());
+
+        return people;
     }
 }
