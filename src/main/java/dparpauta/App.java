@@ -3,12 +3,15 @@ package dparpauta;
 import dparpauta.repository.PersonDao;
 import dparpauta.services.AddressBookDataAnalyser;
 
+import java.io.File;
+
 
 public class App {
 
     public static void main(String[] args) {
 
-        PersonDao personDao = new PersonDao();
+        PersonDao personDao = new PersonDao(new File("/src/main/resources/AddressBook"));
+
         AddressBookDataAnalyser addressBookDataAnalyser = new AddressBookDataAnalyser(personDao);
 
         System.out.println("The number of males in the address book is " + addressBookDataAnalyser.getNumberOfMales());

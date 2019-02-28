@@ -1,7 +1,10 @@
 package dparpauta.repository;
 
+import dparpauta.exceptions.ConfigurationException;
+import dparpauta.exceptions.IncorrectDataException;
 import dparpauta.model.Gender;
 import dparpauta.model.Person;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -18,13 +21,14 @@ import java.util.stream.Stream;
  * A class to read the data from the file (we can replace this with something else when we switch to another way of storing the data)
  */
 @Slf4j
+@AllArgsConstructor
 public class PersonDao {
+
+    private File file;
 
     public List<Person> getAll() {
 
         List<Person> personList = new ArrayList<>();
-
-        File file = new File("src/main/resources/AddressBook");
 
         try (Stream<String> stream = Files.lines(Paths.get(file.getPath()))) {
 
@@ -43,13 +47,18 @@ public class PersonDao {
                 }
                 catch (ParseException e) {
 
-                    log.error("The date could not be parsed {}", data[2], e);
+                    log.error("The date {} could not be parsed for {}", data[2], data[0], e);
+                }
+                catch (IncorrectDataException e) {
+
+                    log.error("The gender {} could not be parsed for {}", data[1], data[0], e);
                 }
             });
         }
         catch (IOException e) {
 
-            log.error("The file could not be read!");
+            log.error("The file could not be read!", e);
+            throw new ConfigurationException("The file you entered could not be read!");
         }
 
         return personList;
